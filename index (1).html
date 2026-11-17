@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>포트폴리오</title>
+<meta name="description" content="개인 포트폴리오 웹페이지">
+<style>
+  :root{
+    --bg:#0f1117; --bg2:#161a23; --card:#1b2030; --line:#2a3145;
+    --text:#e8ebf3; --muted:#9aa3b8; --accent:#7c9cff; --accent2:#b18cff;
+    --radius:18px; --header-h:64px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 8px)}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .container{width:min(1080px,100% - 40px);margin-inline:auto}
+
+  /* Header */
+  header{
+    position:fixed;inset:0 0 auto 0;height:var(--header-h);z-index:50;
+    background:rgba(15,17,23,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid transparent;transition:border-color .3s;
+  }
+  header.scrolled{border-bottom-color:var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:100%}
+  .logo{font-weight:800;letter-spacing:-.02em;font-size:1.1rem}
+  .logo span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .menu{display:flex;gap:6px;list-style:none}
+  .menu a{display:block;padding:8px 14px;border-radius:999px;color:var(--muted);font-size:.95rem;transition:.2s}
+  .menu a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+  .menu a.active{color:#fff;background:rgba(124,156,255,.18)}
+  .burger{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:transparent;cursor:pointer;position:relative}
+  .burger span{position:absolute;left:11px;right:11px;height:2px;background:var(--text);border-radius:2px;transition:.25s}
+  .burger span:nth-child(1){top:14px}.burger span:nth-child(2){top:20px}.burger span:nth-child(3){top:26px}
+  .burger.open span:nth-child(1){top:20px;transform:rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){top:20px;transform:rotate(-45deg)}
+
+  /* Sections */
+  section{padding:104px 0}
+  section.alt{background:var(--bg2)}
+  .eyebrow{color:var(--accent);font-size:.85rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+  h2{font-size:clamp(1.7rem,4vw,2.4rem);letter-spacing:-.03em;line-height:1.25;margin-bottom:36px}
+
+  /* Home */
+  #home{min-height:100svh;display:flex;align-items:center;padding-top:calc(var(--header-h) + 40px);position:relative;overflow:hidden}
+  #home::before,#home::after{content:"";position:absolute;border-radius:50%;filter:blur(90px);opacity:.35;z-index:0}
+  #home::before{width:420px;height:420px;background:var(--accent);top:-80px;right:-100px}
+  #home::after{width:360px;height:360px;background:var(--accent2);bottom:-100px;left:-100px}
+  #home .container{position:relative;z-index:1}
+  .hello{color:var(--muted);font-size:1.05rem;margin-bottom:12px}
+  h1{font-size:clamp(2.4rem,8vw,4.6rem);line-height:1.12;letter-spacing:-.04em;font-weight:800}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tagline{margin-top:20px;color:var(--muted);font-size:clamp(1rem,2.4vw,1.2rem);max-width:640px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{padding:7px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:.92rem;color:var(--text)}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
+  .btn{display:inline-block;padding:13px 26px;border-radius:999px;font-weight:600;font-size:.97rem;transition:.2s;border:1px solid var(--line)}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#0b0d14;border-color:transparent}
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(124,156,255,.35)}
+  .btn.ghost:hover{background:rgba(255,255,255,.06)}
+
+  /* Cards */
+  .grid{display:grid;gap:20px}
+  .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+  .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:.25s}
+  .card:hover{transform:translateY(-4px);border-color:rgba(124,156,255,.5)}
+  .card h3{font-size:1.1rem;margin-bottom:8px;letter-spacing:-.01em}
+  .card p{color:var(--muted);font-size:.97rem}
+  .icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;margin-bottom:16px;font-weight:800;
+        background:linear-gradient(135deg,rgba(124,156,255,.25),rgba(177,140,255,.25));color:var(--accent)}
+
+  /* About */
+  .about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+  .about-text p{color:var(--muted);font-size:1.05rem;margin-bottom:14px}
+  .about-text p strong{color:var(--text)}
+  dl.facts{display:grid;gap:14px}
+  dl.facts div{display:flex;justify-content:space-between;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  dl.facts div:last-child{border:0;padding:0}
+  dt{color:var(--muted)}dd{font-weight:600;text-align:right}
+
+  /* Goal */
+  .goal{
+    text-align:center;padding:56px 28px;border-radius:28px;border:1px solid var(--line);
+    background:radial-gradient(circle at 20% 0%,rgba(124,156,255,.18),transparent 55%),radial-gradient(circle at 90% 100%,rgba(177,140,255,.18),transparent 55%),var(--card);
+  }
+  .goal blockquote{font-size:clamp(1.3rem,3.6vw,2rem);font-weight:700;letter-spacing:-.02em;line-height:1.45;max-width:760px;margin:0 auto}
+
+  .note{margin-top:22px;color:var(--muted);font-size:.88rem}
+  .ph{opacity:.75}
+
+  footer{padding:36px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:.88rem}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
+
+  /* Responsive */
+  @media (max-width:860px){
+    .grid.cols-3{grid-template-columns:1fr 1fr}
+    .about-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    section{padding:80px 0}
+    .burger{display:block}
+    .menu{
+      position:fixed;top:var(--header-h);left:0;right:0;flex-direction:column;gap:2px;padding:12px 20px 20px;
+      background:rgba(15,17,23,.97);border-bottom:1px solid var(--line);
+      transform:translateY(-12px);opacity:0;pointer-events:none;transition:.25s;
+    }
+    .menu.open{transform:none;opacity:1;pointer-events:auto}
+    .menu a{padding:14px 16px;font-size:1rem;border-radius:12px}
+    .grid.cols-3,.grid.cols-2{grid-template-columns:1fr}
+    .btn{flex:1;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="container nav">
+    <a href="#home" class="logo" id="logo"></a>
+    <button class="burger" id="burger" aria-label="메뉴 열기" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="menu" id="menu">
+      <li><a href="#home">홈</a></li>
+      <li><a href="#about">자기소개</a></li>
+      <li><a href="#skills">역량</a></li>
+      <li><a href="#projects">프로젝트</a></li>
+      <li><a href="#goal">진로 목표</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section id="home">
+    <div class="container">
+      <p class="hello">안녕하세요 👋</p>
+      <h1>저는 <em id="h-name"></em>입니다</h1>
+      <p class="tagline" id="h-tagline"></p>
+      <div class="chips" id="h-chips"></div>
+      <div class="cta">
+        <a href="#projects" class="btn primary">프로젝트 보기</a>
+        <a href="#about" class="btn ghost">더 알아보기</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="alt">
+    <div class="container">
+      <p class="eyebrow">About</p>
+      <h2 class="reveal">자기소개</h2>
+      <div class="about-grid">
+        <div class="about-text reveal" id="about-text"></div>
+        <div class="card reveal">
+          <dl class="facts" id="facts"></dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <p class="eyebrow">Skills</p>
+      <h2 class="reveal">역량</h2>
+      <div class="grid cols-3" id="skill-grid"></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="alt">
+    <div class="container">
+      <p class="eyebrow">Projects</p>
+      <h2 class="reveal">프로젝트</h2>
+      <div class="grid cols-2" id="project-grid"></div>
+      <p class="note">※ 프로젝트를 추가하려면 파일 상단 스크립트의 <code>PROJECTS</code> 배열에 항목을 넣어 주세요.</p>
+    </div>
+  </section>
+
+  <!-- GOAL -->
+  <section id="goal">
+    <div class="container">
+      <p class="eyebrow">Goal</p>
+      <h2 class="reveal">진로 목표</h2>
+      <div class="goal reveal">
+        <blockquote id="goal-text"></blockquote>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">© <span id="year"></span> <span id="f-name"></span>. All rights reserved.</div>
+</footer>
+
+<script>
+/* ============================================================
+   ✏️ 여기만 수정하세요 — 내용은 모두 이 PROFILE / PROJECTS 에서 불러옵니다.
+   ============================================================ */
+const PROFILE = {
+  name:      "김은율",
+  major:     "레저해양스포츠학과",
+  interest:  "트레이닝",
+  strengths: ["끈기"],            // 여러 개: ["역량1", "역량2", "역량3"]
+  experience:"헬스장에서 주 5회 운동하고 있습니다",
+  goal:      "몸을 만들어서 트레이너가 되는 것"
+};
+
+// 프로젝트 카드. 비워두면 '활동 경험'이 카드 하나로 표시됩니다.
+// 예) { title:"프로젝트명", desc:"설명", tags:["태그1","태그2"] }
+const PROJECTS = [];
+
+/* ============================================================ */
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+};
+const isPh = (s) => /^\[.*\]$/.test(String(s).trim());
+
+// Basic
+document.title = PROFILE.name + " | 포트폴리오";
+$("logo").append(el("span", "", PROFILE.name));
+$("h-name").textContent = PROFILE.name;
+$("f-name").textContent = PROFILE.name;
+$("year").textContent = new Date().getFullYear();
+$("h-tagline").textContent = PROFILE.major + " · " + PROFILE.interest + "에 관심을 가지고 있습니다.";
+
+[PROFILE.major, PROFILE.interest].forEach(t => $("h-chips").append(el("span", "chip", t)));
+
+// About
+const at = $("about-text");
+const p1 = el("p"); p1.append("저는 ", el("strong", "", PROFILE.major), "에서 공부하고 있으며, ", el("strong", "", PROFILE.interest), " 분야에 관심이 있습니다.");
+const p2 = el("p"); p2.append("지금까지의 활동: ", el("strong", "", PROFILE.experience));
+const p3 = el("p"); p3.append("앞으로의 목표: ", el("strong", "", PROFILE.goal));
+at.append(p1, p2, p3);
+
+[["활동명", PROFILE.name], ["전공", PROFILE.major], ["관심 분야", PROFILE.interest]].forEach(([k, v]) => {
+  const row = el("div"); row.append(el("dt", "", k), el("dd", "", v));
+  $("facts").append(row);
+});
+
+// Skills
+PROFILE.strengths.forEach((s, i) => {
+  const c = el("div", "card reveal");
+  c.append(el("div", "icon", String(i + 1).padStart(2, "0")), el("h3", "", s));
+  $("skill-grid").append(c);
+});
+
+// Projects
+const list = PROJECTS.length ? PROJECTS : [{ title: "활동 경험", desc: PROFILE.experience, tags: [PROFILE.interest] }];
+list.forEach(pj => {
+  const c = el("article", "card reveal");
+  c.append(el("h3", "", pj.title), el("p", "", pj.desc || ""));
+  if (pj.tags && pj.tags.length) {
+    const t = el("div", "chips"); t.style.marginTop = "16px";
+    pj.tags.forEach(x => t.append(el("span", "chip", x)));
+    c.append(t);
+  }
+  $("project-grid").append(c);
+});
+
+// Goal
+$("goal-text").textContent = PROFILE.goal;
+
+// Mark placeholders softly
+document.querySelectorAll("em,strong,dd,.chip,h3,blockquote").forEach(n => { if (isPh(n.textContent)) n.classList.add("ph"); });
+
+// Mobile menu
+const burger = $("burger"), menu = $("menu");
+const closeMenu = () => { menu.classList.remove("open"); burger.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); };
+burger.addEventListener("click", () => {
+  const open = menu.classList.toggle("open");
+  burger.classList.toggle("open", open);
+  burger.setAttribute("aria-expanded", String(open));
+});
+menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenu(); });
+
+// Header shadow
+const header = $("header");
+const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 10);
+window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+// Active menu link
+const links = [...menu.querySelectorAll("a")];
+const secs = links.map(a => document.querySelector(a.getAttribute("href")));
+const spy = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + en.target.id));
+    }
+  });
+}, { rootMargin: "-45% 0px -50% 0px" });
+secs.forEach(s => s && spy.observe(s));
+
+// Reveal on scroll
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll(".reveal").forEach(n => io.observe(n));
+</script>
+</body>
+</html>
